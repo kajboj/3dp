@@ -2,13 +2,14 @@ ifndef SILENT
   SILENT     = @
 endif
 
+NAME       = Sim
 CXX        = g++
 AR         = ar
 BULLETDIR  = ../../bullet3-2.82
 SRCDIR     = ..
-OBJDIR     = obj/x32/Release/App_SoftDemo
+OBJDIR     = obj/x32/Release/App_$(NAME)
 TARGETDIR  = ../target
-TARGET     = $(TARGETDIR)/App_SoftDemo_gmake
+TARGET     = $(TARGETDIR)/App_$(NAME)_gmake
 DEFINES   += 
 INCLUDES  += -I$(BULLETDIR)/src -I$(BULLETDIR)/Demos/OpenGL
 CPPFLAGS  += -MMD -MP $(DEFINES) $(INCLUDES)
@@ -22,7 +23,7 @@ LINKCMD    = $(CXX) -o $(TARGET) $(OBJECTS) $(RESOURCES) $(ARCH) $(LIBS) $(LDFLA
 
 OBJECTS := \
 	$(OBJDIR)/main.o \
-	$(OBJDIR)/SoftDemo.o \
+	$(OBJDIR)/$(NAME).o \
 
 RESOURCES := \
 
@@ -32,7 +33,7 @@ all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
 	@:
 
 $(TARGET): $(GCH) $(OBJECTS) $(LDDEPS) $(RESOURCES)
-	@echo Linking App_SoftDemo
+	@echo Linking App_$(NAME)
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -45,7 +46,7 @@ $(OBJDIR):
 	$(SILENT) mkdir -p $(OBJDIR)
 
 clean:
-	@echo Cleaning App_SoftDemo
+	@echo Cleaning App_$(NAME)
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
 
@@ -58,7 +59,7 @@ endif
 $(OBJDIR)/main.o: $(SRCDIR)/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/SoftDemo.o: $(SRCDIR)/SoftDemo.cpp
+$(OBJDIR)/$(NAME).o: $(SRCDIR)/$(NAME).cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
