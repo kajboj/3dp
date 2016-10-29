@@ -4,11 +4,11 @@ ifndef config
 endif
 
 ifndef BULLETDIR
-  BULLETDIR  = ../../../bullet3-2.82
+  BULLETDIR  = ../../bullet3-2.82
 endif
 
 ifndef SRCDIR
-  SRCDIR  = ../..
+  SRCDIR  = ..
 endif
 
 ifndef verbose
@@ -37,7 +37,7 @@ endif
 
 ifeq ($(config),release32)
   OBJDIR     = obj/x32/Release/App_SoftDemo
-  TARGETDIR  = ../../target
+  TARGETDIR  = ../target
   TARGET     = $(TARGETDIR)/App_SoftDemo_gmake
   DEFINES   += 
   INCLUDES  += -I$(BULLETDIR)/src -I$(BULLETDIR)/Demos/OpenGL
