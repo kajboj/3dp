@@ -1,0 +1,3 @@
+#!/bin/sh
+MAKECMD="make --directory=model/build"
+$MAKECMD clean && $MAKECMD

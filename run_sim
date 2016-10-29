@@ -1,0 +1,2 @@
+#!/bin/sh
+./model/target/App_SoftDemo_gmake
