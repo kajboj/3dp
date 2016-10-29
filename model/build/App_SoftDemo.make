@@ -26,14 +26,6 @@ OBJECTS := \
 
 RESOURCES := \
 
-SHELLTYPE := msdos
-ifeq (,$(ComSpec)$(COMSPEC))
-  SHELLTYPE := posix
-endif
-ifeq (/bin,$(findstring /bin,$(SHELL)))
-  SHELLTYPE := posix
-endif
-
 .PHONY: clean prebuild prelink
 
 all: $(TARGETDIR) $(OBJDIR) prebuild prelink $(TARGET)
@@ -46,45 +38,21 @@ $(TARGET): $(GCH) $(OBJECTS) $(LDDEPS) $(RESOURCES)
 
 $(TARGETDIR):
 	@echo Creating $(TARGETDIR)
-ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(TARGETDIR)
-else
-	$(SILENT) mkdir $(subst /,\\,$(TARGETDIR))
-endif
 
 $(OBJDIR):
 	@echo Creating $(OBJDIR)
-ifeq (posix,$(SHELLTYPE))
 	$(SILENT) mkdir -p $(OBJDIR)
-else
-	$(SILENT) mkdir $(subst /,\\,$(OBJDIR))
-endif
 
 clean:
 	@echo Cleaning App_SoftDemo
-ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(OBJDIR)
-else
-	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
-	$(SILENT) if exist $(subst /,\\,$(OBJDIR)) rmdir /s /q $(subst /,\\,$(OBJDIR))
-endif
-
-prebuild:
-	$(PREBUILDCMDS)
-
-prelink:
-	$(PRELINKCMDS)
 
 ifneq (,$(PCH))
 $(GCH): $(PCH)
 	@echo $(notdir $<)
-ifeq (posix,$(SHELLTYPE))
 	-$(SILENT) cp $< $(OBJDIR)
-else
-	$(SILENT) xcopy /D /Y /Q "$(subst /,\,$<)" "$(subst /,\,$(OBJDIR))" 1>nul
-endif
-	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 endif
 
 $(OBJDIR)/main.o: $(SRCDIR)/main.cpp
