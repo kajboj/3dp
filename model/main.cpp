@@ -13,7 +13,7 @@ subject to the following restrictions:
 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "SoftDemo.h"
+#include "Sim.h"
 #include "GlutStuff.h"
 #include "GLDebugDrawer.h"
 #include "btBulletDynamicsCommon.h"
@@ -23,15 +23,15 @@ GLDebugDrawer	gDebugDrawer;
 int main(int argc,char** argv)
 {
 
-	SoftDemo* softDemo = new SoftDemo();
+	Sim* sim = new Sim();
 
-	softDemo->initPhysics();
-	softDemo->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
+	sim->initPhysics();
+	sim->getDynamicsWorld()->setDebugDrawer(&gDebugDrawer);
 
 
-	glutmain(argc, argv,1024,768,"Bullet Physics Demo. http://bulletphysics.com",softDemo);
+	glutmain(argc, argv,1024,768,"Bullet Physics Demo. http://bulletphysics.com",sim);
 
-	delete softDemo;
+	delete sim;
 	return 0;
 
 }

@@ -1,23 +1,5 @@
-
-/*
-Bullet Continuous Collision Detection and Physics Library
-Copyright (c) 2003-2006 Erwin Coumans  http://continuousphysics.com/Bullet/
-
-This software is provided 'as-is', without any express or implied warranty.
-In no event will the authors be held liable for any damages arising from the use of this software.
-Permission is granted to anyone to use this software for any purpose, 
-including commercial applications, and to alter it and redistribute it freely, 
-subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-*/
-
-///btSoftBody implementation by Nathanael Presson
-
-#ifndef SOFT_DEMO_H
-#define SOFT_DEMO_H
+#ifndef SIM_H
+#define SIM_H
 
 #ifdef _WINDOWS
 #include "Win32DemoApplication.h"
@@ -47,7 +29,7 @@ class btSoftRigidDynamicsWorld;
 
 
 ///CcdPhysicsDemo shows basic stacking using Bullet physics, and allows toggle of Ccd (using key '1')
-class SoftDemo : public PlatformDemoApplication
+class Sim : public PlatformDemoApplication
 {
 public:
 
@@ -93,12 +75,12 @@ public:
 
 	void	exitPhysics();
 
-	SoftDemo() : m_drag(false)
+	Sim() : m_drag(false)
 	{
 		setTexturing(true);
 		setShadows(true);
 	}
-	virtual ~SoftDemo()
+	virtual ~Sim()
 	{
 		exitPhysics();
 	}
@@ -111,7 +93,7 @@ public:
 
 	static DemoApplication* Create()
 	{
-		SoftDemo* demo = new SoftDemo;
+		Sim* demo = new Sim;
 		demo->myinit();
 		demo->initPhysics();
 		return demo;
@@ -142,12 +124,12 @@ public:
 
 };
 
-#define MACRO_SOFT_DEMO(a) class SoftDemo##a : public SoftDemo\
+#define MACRO_SIM(a) class Sim##a : public Sim\
 {\
 public:\
 	static DemoApplication* Create()\
 	{\
-		SoftDemo* demo = new SoftDemo##a;\
+		Sim* demo = new Sim##a;\
 		extern int current_demo;\
 		current_demo=a;\
 		demo->myinit();\
@@ -157,36 +139,36 @@ public:\
 };
 
 
-MACRO_SOFT_DEMO(0) //Init_Cloth
-MACRO_SOFT_DEMO(1) //Init_Pressure
-MACRO_SOFT_DEMO(2)//Init_Volume
-MACRO_SOFT_DEMO(3)//Init_Ropes
-MACRO_SOFT_DEMO(4)//Init_Ropes_Attach
-MACRO_SOFT_DEMO(5)//Init_ClothAttach
-MACRO_SOFT_DEMO(6)//Init_Sticks
-MACRO_SOFT_DEMO(7)//Init_Collide
-MACRO_SOFT_DEMO(8)//Init_Collide2
-MACRO_SOFT_DEMO(9)//Init_Collide3
-MACRO_SOFT_DEMO(10)//Init_Impact
-MACRO_SOFT_DEMO(11)//Init_Aero
-MACRO_SOFT_DEMO(12)//Init_Friction
-MACRO_SOFT_DEMO(13)//Init_Torus
-MACRO_SOFT_DEMO(14)//Init_TorusMatch
-MACRO_SOFT_DEMO(15)//Init_Bunny
-MACRO_SOFT_DEMO(16)//Init_BunnyMatch
-MACRO_SOFT_DEMO(17)//Init_Cutting1
-MACRO_SOFT_DEMO(18)//Init_ClusterDeform
-MACRO_SOFT_DEMO(19)//Init_ClusterCollide1
-MACRO_SOFT_DEMO(20)//Init_ClusterCollide2
-MACRO_SOFT_DEMO(21)//Init_ClusterSocket
-MACRO_SOFT_DEMO(22)//Init_ClusterHinge
-MACRO_SOFT_DEMO(23)//Init_ClusterCombine
-MACRO_SOFT_DEMO(24)//Init_ClusterCar
-MACRO_SOFT_DEMO(25)//Init_ClusterRobot
-MACRO_SOFT_DEMO(26)//Init_ClusterStackSoft
-MACRO_SOFT_DEMO(27)//Init_ClusterStackMixed
-MACRO_SOFT_DEMO(28)//Init_TetraCube
-MACRO_SOFT_DEMO(29)//Init_TetraBunny
+MACRO_SIM(0) //Init_Cloth
+MACRO_SIM(1) //Init_Pressure
+MACRO_SIM(2)//Init_Volume
+MACRO_SIM(3)//Init_Ropes
+MACRO_SIM(4)//Init_Ropes_Attach
+MACRO_SIM(5)//Init_ClothAttach
+MACRO_SIM(6)//Init_Sticks
+MACRO_SIM(7)//Init_Collide
+MACRO_SIM(8)//Init_Collide2
+MACRO_SIM(9)//Init_Collide3
+MACRO_SIM(10)//Init_Impact
+MACRO_SIM(11)//Init_Aero
+MACRO_SIM(12)//Init_Friction
+MACRO_SIM(13)//Init_Torus
+MACRO_SIM(14)//Init_TorusMatch
+MACRO_SIM(15)//Init_Bunny
+MACRO_SIM(16)//Init_BunnyMatch
+MACRO_SIM(17)//Init_Cutting1
+MACRO_SIM(18)//Init_ClusterDeform
+MACRO_SIM(19)//Init_ClusterCollide1
+MACRO_SIM(20)//Init_ClusterCollide2
+MACRO_SIM(21)//Init_ClusterSocket
+MACRO_SIM(22)//Init_ClusterHinge
+MACRO_SIM(23)//Init_ClusterCombine
+MACRO_SIM(24)//Init_ClusterCar
+MACRO_SIM(25)//Init_ClusterRobot
+MACRO_SIM(26)//Init_ClusterStackSoft
+MACRO_SIM(27)//Init_ClusterStackMixed
+MACRO_SIM(28)//Init_TetraCube
+MACRO_SIM(29)//Init_TetraBunny
 
 
 #endif //CCD_PHYSICS_DEMO_H

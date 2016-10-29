@@ -1,2 +1,2 @@
 #!/bin/sh
-./model/target/App_SoftDemo_gmake
+./model/target/App_Sim_gmake
