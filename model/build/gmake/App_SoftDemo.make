@@ -7,7 +7,7 @@ ifndef BULLETDIR
   BULLETDIR  = ../../../bullet3-2.82
 endif
 
-ifndef BULLETDIR
+ifndef SRCDIR
   SRCDIR  = ../..
 endif
 
@@ -124,10 +124,10 @@ endif
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 endif
 
-$(OBJDIR)/main.o: $(BULLETDIR)/Demos/SoftDemo/main.cpp
+$(OBJDIR)/main.o: $(SRCDIR)/main.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
-$(OBJDIR)/SoftDemo.o: $(BULLETDIR)/Demos/SoftDemo/SoftDemo.cpp
+$(OBJDIR)/SoftDemo.o: $(SRCDIR)/SoftDemo.cpp
 	@echo $(notdir $<)
 	$(SILENT) $(CXX) $(CXXFLAGS) -o "$@" -MF $(@:%.o=%.d) -c "$<"
 
