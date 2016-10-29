@@ -6,18 +6,18 @@ ifndef config
 endif
 export config
 
-PROJECTS := App_HelloWorld App_BasicDemo App_Box2dDemo App_BspDemo App_CcdPhysicsDemo App_CollisionDemo App_CollisionInterfaceDemo App_ConcaveConvexcastDemo App_ConcaveDemo App_ConcaveRaycastDemo App_ConstraintDemo App_ContinuousConvexCollision App_ConvexHullDistance App_DynamicControlDemo App_EPAPenDepthDemo App_ForkLiftDemo App_FeatherstoneMultiBodyDemo App_FractureDemo App_GenericJointDemo App_GimpactTestDemo App_GjkConvexCastDemo App_GyroscopicDemo App_InternalEdgeDemo App_MovingConcaveDemo App_MultiMaterialDemo App_RagdollDemo App_Raytracer App_RaytestDemo App_RollingFrictionDemo App_SimplexDemo App_SliderConstraintDemo App_TerrainDemo App_UserCollisionAlgorithm App_VehicleDemo App_VoronoiFractureDemo App_ConvexDecompositionDemo App_SoftDemo App_SerializeDemo App_BulletXmlImportDemo OpenGLSupport HACD ConvexDecomposition BulletFileLoader BulletWorldImporter BulletXmlWorldImporter LinearMath BulletCollision BulletDynamics BulletSoftBody AppUnitTest AppHelloWorld AppBenchmarks
+PROJECTS := Sim OpenGLSupport BulletSoftBody BulletDynamics BulletCollision LinearMath
 
 .PHONY: all clean help $(PROJECTS)
 
 all: $(PROJECTS)
 
-App_SoftDemo: OpenGLSupport BulletSoftBody BulletDynamics BulletCollision LinearMath
-	@echo "==== Building App_SoftDemo ($(config)) ===="
-	@${MAKE} --no-print-directory -C . -f App_SoftDemo.make
+Sim: OpenGLSupport BulletSoftBody BulletDynamics BulletCollision LinearMath
+	@echo "==== Building Sim ($(config)) ===="
+	@${MAKE} --no-print-directory -C . -f Sim.make
 
 clean:
-	@${MAKE} --no-print-directory -C . -f App_SoftDemo.make clean
+	@${MAKE} --no-print-directory -C . -f Sim.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -29,6 +29,4 @@ help:
 	@echo "TARGETS:"
 	@echo "   all (default)"
 	@echo "   clean"
-	@echo "   App_SoftDemo"
-	@echo ""
-	@echo "For more information, see http://industriousone.com/premake/quick-start"
+	@echo "   Sim"
