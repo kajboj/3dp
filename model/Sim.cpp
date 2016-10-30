@@ -328,46 +328,6 @@ static void	Init_RopeAttach(Sim* pdemo)
 	psb1->appendAnchor(psb1->m_nodes.size()-1,body);
 }
 
-//
-static struct MotorControl : btSoftBody::AJoint::IControl
-{
-	MotorControl()
-	{
-		goal=0;
-		maxtorque=0;
-	}
-	btScalar	Speed(btSoftBody::AJoint*,btScalar current)
-	{
-		return(current+btMin(maxtorque,btMax(-maxtorque,goal-current)));
-	}
-	btScalar	goal;
-	btScalar	maxtorque;
-}	motorcontrol;
-
-//
-struct SteerControl : btSoftBody::AJoint::IControl
-{
-	SteerControl(btScalar s)
-	{
-		angle=0;
-		sign=s;
-	}
-	void		Prepare(btSoftBody::AJoint* joint)
-	{
-		joint->m_refs[0][0]=btCos(angle*sign);
-		joint->m_refs[0][2]=btSin(angle*sign);
-	}
-	btScalar	Speed(btSoftBody::AJoint* joint,btScalar current)
-	{
-		return(motorcontrol.Speed(joint,current));
-	}
-	btScalar	angle;
-	btScalar	sign;
-};
-
-static SteerControl	steercontrol_f(+1);
-static SteerControl	steercontrol_r(-1);
-
 	/* Init		*/ 
 	void (*demofncs[])(Sim*)=
 	{
@@ -440,16 +400,6 @@ void	Sim::clientResetScene()
 	m_dynamicsWorld->addCollisionObject(newOb);
 
 	m_softBodyWorldInfo.m_sparsesdf.Reset();
-
-
-
-
-
-	
-
-	motorcontrol.goal = 0;
-	motorcontrol.maxtorque = 0;
-
 
 
 	m_softBodyWorldInfo.air_density		=	(btScalar)1.2;
@@ -914,10 +864,6 @@ void	Sim::initPhysics()
 
 	
 	m_azi = 0;
-
-	//reset and disable motorcontrol at the start
-	motorcontrol.goal = 0;
-	motorcontrol.maxtorque = 0;
 
 	btCollisionShape* groundShape = 0;
 	{
