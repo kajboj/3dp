@@ -142,20 +142,6 @@ struct	ImplicitSphere : btSoftBody::ImplicitFn
 	}
 };
 
-//
-// Tetra meshes
-//
-
-struct	TetraBunny
-{
-#include "bunny.inl"
-};
-
-struct	TetraCube
-{
-#include "cube.inl"
-};
-
 
 //
 // Random
