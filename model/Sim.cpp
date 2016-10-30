@@ -140,29 +140,31 @@ static void	Init_RopeAttach(Sim* pdemo)
 	pdemo->m_softBodyWorldInfo.m_sparsesdf.RemoveReferences(0);
 	struct	Functors
 	{
-		static btSoftBody* CtorRope(Sim* pdemo,const btVector3& p)
+		static btSoftBody* CtorRope(Sim* pdemo,const btVector3& p, const btVector3& o)
 		{
-			btSoftBody*	psb=btSoftBodyHelpers::CreateRope(pdemo->m_softBodyWorldInfo,p,p+btVector3(10,0,0),8,1);
-			psb->setTotalMass(50);
+			btSoftBody*	psb=btSoftBodyHelpers::CreateRope(pdemo->m_softBodyWorldInfo,p,p+o+btVector3(0,-9,0),8,1);
+			psb->setTotalMass(10);
 			pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
 			return(psb);
 		}
 	};
 	btTransform startTransform;
 	startTransform.setIdentity();
-	startTransform.setOrigin(btVector3(12,8,0));
-	btRigidBody*		body=pdemo->localCreateRigidBody(50,startTransform,new btBoxShape(btVector3(2,6,2)));
-	btSoftBody*	psb0=Functors::CtorRope(pdemo,btVector3(0,8,-1));
-	btSoftBody*	psb1=Functors::CtorRope(pdemo,btVector3(0,8,+1));
+	startTransform.setOrigin(btVector3(0,-1,0));
+	btRigidBody*		body=pdemo->localCreateRigidBody(500,startTransform,new btBoxShape(btVector3(1,2,1)));
+	btSoftBody*	psb0=Functors::CtorRope(pdemo,btVector3(0,10,-4), btVector3(0,0,3));
+	btSoftBody*	psb1=Functors::CtorRope(pdemo,btVector3(-4,10,4), btVector3(3,0,-3));
+	btSoftBody*	psb2=Functors::CtorRope(pdemo,btVector3(4,10,4), btVector3(-3,0,-3));
 	psb0->appendAnchor(psb0->m_nodes.size()-1,body);
 	psb1->appendAnchor(psb1->m_nodes.size()-1,body);
+	psb2->appendAnchor(psb1->m_nodes.size()-1,body);
 }
 
 	/* Init		*/ 
 	void (*demofncs[])(Sim*)=
 	{
-		Init_Ropes,
 		Init_RopeAttach,
+		Init_Ropes,
 	};
 
 void	Sim::clientResetScene()
