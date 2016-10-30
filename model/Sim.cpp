@@ -6,8 +6,6 @@
 #include "LinearMath/btQuickprof.h"
 #include "LinearMath/btIDebugDraw.h"
 
-#include "../GimpactTestDemo/BunnyMesh.h"
-#include "../GimpactTestDemo/TorusMesh.h"
 #include <stdio.h> //printf debugging
 #include "LinearMath/btConvexHull.h"
 #include "BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.h"
