@@ -1,13 +1,7 @@
 #ifndef SIM_H
 #define SIM_H
 
-#ifdef _WINDOWS
-#include "Win32DemoApplication.h"
-#define PlatformDemoApplication Win32DemoApplication
-#else
 #include "GlutDemoApplication.h"
-#define PlatformDemoApplication GlutDemoApplication
-#endif
 #include "LinearMath/btAlignedObjectArray.h"
 #include "BulletSoftBody/btSoftBody.h"
 
@@ -29,7 +23,7 @@ class btSoftRigidDynamicsWorld;
 
 
 ///CcdPhysicsDemo shows basic stacking using Bullet physics, and allows toggle of Ccd (using key '1')
-class Sim : public PlatformDemoApplication
+class Sim : public GlutDemoApplication
 {
 public:
 
@@ -138,42 +132,7 @@ public:\
 	}\
 };
 
-
-MACRO_SIM(0) //Init_Cloth
-MACRO_SIM(1) //Init_Pressure
-MACRO_SIM(2)//Init_Volume
 MACRO_SIM(3)//Init_Ropes
 MACRO_SIM(4)//Init_Ropes_Attach
-MACRO_SIM(5)//Init_ClothAttach
-MACRO_SIM(6)//Init_Sticks
-MACRO_SIM(7)//Init_Collide
-MACRO_SIM(8)//Init_Collide2
-MACRO_SIM(9)//Init_Collide3
-MACRO_SIM(10)//Init_Impact
-MACRO_SIM(11)//Init_Aero
-MACRO_SIM(12)//Init_Friction
-MACRO_SIM(13)//Init_Torus
-MACRO_SIM(14)//Init_TorusMatch
-MACRO_SIM(15)//Init_Bunny
-MACRO_SIM(16)//Init_BunnyMatch
-MACRO_SIM(17)//Init_Cutting1
-MACRO_SIM(18)//Init_ClusterDeform
-MACRO_SIM(19)//Init_ClusterCollide1
-MACRO_SIM(20)//Init_ClusterCollide2
-MACRO_SIM(21)//Init_ClusterSocket
-MACRO_SIM(22)//Init_ClusterHinge
-MACRO_SIM(23)//Init_ClusterCombine
-MACRO_SIM(24)//Init_ClusterCar
-MACRO_SIM(25)//Init_ClusterRobot
-MACRO_SIM(26)//Init_ClusterStackSoft
-MACRO_SIM(27)//Init_ClusterStackMixed
-MACRO_SIM(28)//Init_TetraCube
-MACRO_SIM(29)//Init_TetraBunny
-
 
 #endif //CCD_PHYSICS_DEMO_H
-
-
-
-
-
