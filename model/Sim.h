@@ -1,10 +1,6 @@
-#ifndef SIM_H
-#define SIM_H
-
 #include "GlutDemoApplication.h"
 #include "LinearMath/btAlignedObjectArray.h"
 #include "BulletSoftBody/btSoftBody.h"
-
 
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -134,5 +130,3 @@ public:\
 
 MACRO_SIM(3)//Init_Ropes
 MACRO_SIM(4)//Init_Ropes_Attach
-
-#endif //CCD_PHYSICS_DEMO_H
