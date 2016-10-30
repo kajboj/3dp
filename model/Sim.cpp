@@ -42,35 +42,6 @@ const int maxNumObjects = 32760;
 #define CUBE_HALF_EXTENTS 1.5
 #define EXTRA_HEIGHT -10.f
 
-//
-void Sim::createStack( btCollisionShape* boxShape, float halfCubeSize, int size, float zPos )
-{
-	btTransform trans;
-	trans.setIdentity();
-
-	for(int i=0; i<size; i++)
-	{
-		// This constructs a row, from left to right
-		int rowSize = size - i;
-		for(int j=0; j< rowSize; j++)
-		{
-			btVector3 pos;
-			pos.setValue(
-				-rowSize * halfCubeSize + halfCubeSize + j * 2.0f * halfCubeSize,
-				halfCubeSize + i * halfCubeSize * 2.0f,
-				zPos);
-
-			trans.setOrigin(pos);
-			btScalar mass = 1.f;
-
-			btRigidBody* body = 0;
-			body = localCreateRigidBody(mass,trans,boxShape);
-
-		}
-	}
-}
-
-
 ////////////////////////////////////
 
 extern int gNumManifold;
@@ -108,7 +79,6 @@ void pickingPreTickCallback (btDynamicsWorld *world, btScalar timeStep)
 		}
 		sim->m_node->m_v+=delta/timeStep;
 	}
-
 }
 
 void Sim::displayCallback(void) {
@@ -139,144 +109,6 @@ struct	ImplicitSphere : btSoftBody::ImplicitFn
 		return((x-center).length2()-sqradius);
 	}
 };
-
-
-//
-// Random
-//
-
-static inline btScalar	UnitRand()
-{
-	return(rand()/(btScalar)RAND_MAX);
-}
-
-static inline btScalar	SignedUnitRand()
-{
-	return(UnitRand()*2-1);
-}
-
-static inline btVector3	Vector3Rand()
-{
-	const btVector3	p=btVector3(SignedUnitRand(),SignedUnitRand(),SignedUnitRand());
-	return(p.normalized());
-}
-
-//
-// Rb rain
-//
-static void	Ctor_RbUpStack(Sim* pdemo,int count)
-{
-	float				mass=10;
-
-	btCompoundShape* cylinderCompound = new btCompoundShape;
-	btCollisionShape* cylinderShape = new btCylinderShapeX(btVector3(4,1,1));
-	btCollisionShape* boxShape = new btBoxShape(btVector3(4,1,1));
-	btTransform localTransform;
-	localTransform.setIdentity();
-	cylinderCompound->addChildShape(localTransform,boxShape);
-	btQuaternion orn(SIMD_HALF_PI,0,0);
-	localTransform.setRotation(orn);
-	//	localTransform.setOrigin(btVector3(1,1,1));
-	cylinderCompound->addChildShape(localTransform,cylinderShape);
-
-
-	btCollisionShape*	shape[]={cylinderCompound,
-		new btBoxShape(btVector3(1,1,1)),
-		new btSphereShape(1.5)
-		
-	};
-	static const int	nshapes=sizeof(shape)/sizeof(shape[0]);
-	for(int i=0;i<count;++i)
-	{
-		btTransform startTransform;
-		startTransform.setIdentity();
-		startTransform.setOrigin(btVector3(0,2+6*i,0));
-		pdemo->localCreateRigidBody(mass,startTransform,shape[i%nshapes]);
-		//pdemo->localCreateRigidBody(mass,startTransform,shape[0]);
-	}
-}
-
-//
-// Big ball
-//
-static void	Ctor_BigBall(Sim* pdemo,btScalar mass=10)
-{
-	btTransform startTransform;
-	startTransform.setIdentity();
-	startTransform.setOrigin(btVector3(0,13,0));
-	pdemo->localCreateRigidBody(mass,startTransform,new btSphereShape(3));
-}
-
-//
-// Big plate
-//
-static btRigidBody*	Ctor_BigPlate(Sim* pdemo,btScalar mass=15,btScalar height=4)
-{
-	btTransform startTransform;
-	startTransform.setIdentity();
-	startTransform.setOrigin(btVector3(0,height,0.5));
-	btRigidBody*		body=pdemo->localCreateRigidBody(mass,startTransform,new btBoxShape(btVector3(5,1,5)));
-	body->setFriction(1);
-	return(body);
-}
-
-//
-// Linear stair
-//
-static void Ctor_LinearStair(Sim* pdemo,const btVector3& org,const btVector3& sizes,btScalar angle,int count)
-{
-	btBoxShape*	shape=new btBoxShape(sizes);
-	for(int i=0;i<count;++i)
-	{
-		btTransform startTransform;
-		startTransform.setIdentity();
-		startTransform.setOrigin(org+btVector3(sizes.x()*i*2,sizes.y()*i*2,0));
-		btRigidBody* body=pdemo->localCreateRigidBody(0,startTransform,shape);
-		body->setFriction(1);
-	}
-}
-
-//
-// Softbox
-//
-static btSoftBody* Ctor_SoftBox(Sim* pdemo,const btVector3& p,const btVector3& s)
-{
-	const btVector3	h=s*0.5;
-	const btVector3	c[]={	p+h*btVector3(-1,-1,-1),
-		p+h*btVector3(+1,-1,-1),
-		p+h*btVector3(-1,+1,-1),
-		p+h*btVector3(+1,+1,-1),
-		p+h*btVector3(-1,-1,+1),
-		p+h*btVector3(+1,-1,+1),
-		p+h*btVector3(-1,+1,+1),
-		p+h*btVector3(+1,+1,+1)};
-	btSoftBody*		psb=btSoftBodyHelpers::CreateFromConvexHull(pdemo->m_softBodyWorldInfo,c,8);
-	psb->generateBendingConstraints(2);
-	pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
-
-	return(psb);
-
-}
-
-//
-// SoftBoulder
-//
-static btSoftBody* Ctor_SoftBoulder(Sim* pdemo,const btVector3& p,const btVector3& s,int np,int id)
-{
-	btAlignedObjectArray<btVector3>	pts;
-	if(id) srand(id);
-	for(int i=0;i<np;++i)
-	{
-		pts.push_back(Vector3Rand()*s+p);
-	}
-	btSoftBody*		psb=btSoftBodyHelpers::CreateFromConvexHull(pdemo->m_softBodyWorldInfo,&pts[0],pts.size());
-	psb->generateBendingConstraints(2);
-	pdemo->getSoftDynamicsWorld()->addSoftBody(psb);
-
-	return(psb);
-}
-
-//#define TRACEDEMO { pdemo->demoname=__FUNCTION__+5;printf("Launching demo: " __FUNCTION__ "\r\n"); }
 
 //
 // Basic ropes
@@ -459,22 +291,6 @@ void Sim::clientMoveAndDisplay()
 		numSimSteps = m_dynamicsWorld->stepSimulation(dt);
 		//numSimSteps = m_dynamicsWorld->stepSimulation(dt,10,1./240.f);
 
-#ifdef VERBOSE_TIMESTEPPING_CONSOLEOUTPUT
-		if (!numSimSteps)
-			printf("Interpolated transforms\n");
-		else
-		{
-			if (numSimSteps > maxSimSubSteps)
-			{
-				//detect dropping frames
-				printf("Dropped (%i) simulation steps out of %i\n",numSimSteps - maxSimSubSteps,numSimSteps);
-			} else
-			{
-				printf("Simulated (%i) steps\n",numSimSteps);
-			}
-		}
-#endif //VERBOSE_TIMESTEPPING_CONSOLEOUTPUT
-
 #endif		
 
 		if(m_drag)
@@ -483,37 +299,15 @@ void Sim::clientMoveAndDisplay()
 		}
 
 		m_softBodyWorldInfo.m_sparsesdf.GarbageCollect();
-
-		//optional but useful: debug drawing
-
 	}
-
-#ifdef USE_QUICKPROF 
-	btProfiler::beginBlock("render"); 
-#endif //USE_QUICKPROF 
 
 	renderme(); 
 
-	//render the graphics objects, with center of mass shift
-
 	updateCamera();
 
-
-
-#ifdef USE_QUICKPROF 
-	btProfiler::endBlock("render"); 
-#endif 
 	glFlush();
-	//some additional debugging info
-#ifdef PRINT_CONTACT_STATISTICS
-	printf("num manifolds: %i\n",gNumManifold);
-	printf("num gOverlappingPairs: %i\n",gOverlappingPairs);
-	
-#endif //PRINT_CONTACT_STATISTICS
-
 
 	swapBuffers();
-
 }
 
 
@@ -715,8 +509,6 @@ void	Sim::setDrawClusters(bool drawClusters)
 		getSoftDynamicsWorld()->setDrawFlags(getSoftDynamicsWorld()->getDrawFlags()& (~fDrawFlags::Clusters));
 	}
 }
-
-
 
 void	Sim::keyboardCallback(unsigned char key, int x, int y)
 {
@@ -949,8 +741,6 @@ void	Sim::initPhysics()
 
 
 	///Register softbody versus rigidbody collision algorithm
-
-
 	////////////////////////////
 
 	btVector3 worldAabbMin(-1000,-1000,-1000);
@@ -974,8 +764,6 @@ void	Sim::initPhysics()
 	m_dynamicsWorld->getDispatchInfo().m_enableSPU = true;
 	m_dynamicsWorld->setGravity(btVector3(0,-10,0));
 	m_softBodyWorldInfo.m_gravity.setValue(0,-10,0);
-
-	//	clientResetScene();
 
 	m_softBodyWorldInfo.m_sparsesdf.Initialize();
 	clientResetScene();
@@ -1024,6 +812,4 @@ void	Sim::exitPhysics()
 
 
 	delete m_collisionConfiguration;
-
-
 }
